@@ -29,6 +29,9 @@
       * {
         box-sizing: border-box;
       }
+      @view-transition {
+        navigation: auto;
+      }
       html {
         scroll-behavior: smooth;
         scroll-padding-top: 5rem;
@@ -249,7 +252,13 @@
         border-radius: 3px;
         padding: clamp(1.2rem, 3vw, 2rem);
         margin: 1.2rem 0;
-        background: var(--white);
+        background:
+          radial-gradient(
+            220px circle at var(--spot-x, 50%) var(--spot-y, 0%),
+            #efc75e38,
+            transparent 76%
+          ),
+          var(--white);
         box-shadow: 4px 4px 0 #244d3a12;
         transition:
           transform 0.25s ease,
@@ -423,6 +432,24 @@
         opacity: 1;
         transform: translateY(0);
       }
+      ::view-transition-old(root) {
+        animation: page-out 0.18s ease both;
+      }
+      ::view-transition-new(root) {
+        animation: page-in 0.38s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+      }
+      @keyframes page-out {
+        to {
+          opacity: 0;
+          transform: translateY(-8px);
+        }
+      }
+      @keyframes page-in {
+        from {
+          opacity: 0;
+          transform: translateY(12px);
+        }
+      }
       @media (max-width: 600px) {
         header {
           padding: 0.7rem 1rem;
@@ -466,6 +493,10 @@
         .reveal {
           opacity: 1;
           transform: none;
+        }
+        ::view-transition-old(root),
+        ::view-transition-new(root) {
+          animation: none;
         }
       }
     </style>

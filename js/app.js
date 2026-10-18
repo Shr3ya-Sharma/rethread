@@ -359,13 +359,21 @@ async function pick(file) {
   }
 }
 function route() {
-  const r = location.hash.replace(/^#\/?/, "");
-  if (r === "") story();
-  else {
-    if (r !== "studio") history.replaceState(null, "", "#/studio");
-    studio();
-  }
-  $.focus();
+  const render = () => {
+    const r = location.hash.replace(/^#\/?/, "");
+    if (r === "") story();
+    else {
+      if (r !== "studio") history.replaceState(null, "", "#/studio");
+      studio();
+    }
+    $.focus();
+  };
+  if (
+    document.startViewTransition &&
+    !matchMedia("(prefers-reduced-motion: reduce)").matches
+  ) {
+    document.startViewTransition(render);
+  } else render();
 }
 const revealObserver = new IntersectionObserver(
   (entries) =>
@@ -409,5 +417,12 @@ addEventListener(
   },
   { passive: true },
 );
+$.addEventListener("pointermove", (event) => {
+  const box = event.target.closest(".box");
+  if (!box) return;
+  const bounds = box.getBoundingClientRect();
+  box.style.setProperty("--spot-x", `${event.clientX - bounds.left}px`);
+  box.style.setProperty("--spot-y", `${event.clientY - bounds.top}px`);
+});
 addEventListener("hashchange", route);
 route();
