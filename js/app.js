@@ -22,6 +22,7 @@ const fresh = (t) => ({
   f: { diff: 0, sew: "any", cat: "any", sort: "best" },
 });
 let S = fresh(0);
+let threadObserver;
 const reset = () => {
   const t = S.token + 1;
   if (S.url) URL.revokeObjectURL(S.url);
@@ -53,6 +54,28 @@ function story() {
   $.innerHTML = `<div class="story-hero"><p class="eyebrow">A second life, stitched by you</p><h1>Your old clothes aren’t the end of the <em>story.</em></h1>
   <p class="lede">What happens to a garment when we stop wearing it? Explore the evidence, hear from real people, and discover what one of your own tops could become.</p>
   <div class="hero-actions"><a class="btn" href="#/studio">Make something new</a><span class="hero-note">A little less waste. A lot more possibility.</span></div></div>
+  <section class="thread-story" aria-label="A garment's journey">
+  <div class="thread-stage" id="thread-stage" data-step="0">
+    <p class="eyebrow">Follow the thread</p><h2>One garment. A bigger system.</h2>
+    <div class="thread-mark" aria-hidden="true"><span class="thread-orbit"></span><span class="thread-spool"></span><span class="thread-needle"></span></div>
+    <div class="thread-fact" aria-live="polite" aria-atomic="true"><p class="thread-kicker" id="thread-label">${esc(FINDINGS[0].label)}</p><p class="thread-value" id="thread-value">${esc(FINDINGS[0].value)}</p><p class="thread-source"><a id="thread-source" href="${esc(FINDINGS[0].url)}">${esc(FINDINGS[0].publisher)}, ${esc(FINDINGS[0].published)}</a></p></div>
+    <div class="thread-nav" role="group" aria-label="Choose a story chapter">${[
+      [FINDINGS[0], "Buy & wear"],
+      [FINDINGS[1], "Discard"],
+      [FINDINGS[4], "Reuse"],
+    ].map(([finding, label], i) => `<button type="button" data-thread-go="${i}" aria-pressed="${i === 0}"><span>0${i + 1}</span>${label}</button>`).join("")}</div>
+  </div>
+  <div class="thread-steps">
+    <article class="thread-step is-current" data-thread-step="0" data-title="${esc(FINDINGS[0].label)}" data-value="${esc(FINDINGS[0].value)}" data-url="${esc(FINDINGS[0].url)}" data-publisher="${esc(FINDINGS[0].publisher)}" data-published="${esc(FINDINGS[0].published)}">
+      <p class="thread-index">01 / The buying loop</p><h3>More in. Less time worn.</h3><p>UNEP reports this as an estimate, but gives no baseline year or comparison group. It describes a broad pattern, not what any one person should buy.</p><p class="thread-hint">Scroll to follow the next stitch <span aria-hidden="true">↓</span></p>
+    </article>
+    <article class="thread-step" data-thread-step="1" data-title="${esc(FINDINGS[1].label)}" data-value="${esc(FINDINGS[1].value)}" data-url="${esc(FINDINGS[1].url)}" data-publisher="${esc(FINDINGS[1].publisher)}" data-published="${esc(FINDINGS[1].published)}">
+      <p class="thread-index">02 / The discard route</p><h3>A system-sized pile.</h3><p>UNEP attributes this estimate to the Ellen MacArthur Foundation. The cited page does not specify truck size or year, so read it as an illustration of scale, not a precise count.</p><p class="thread-hint">Keep going <span aria-hidden="true">↓</span></p>
+    </article>
+    <article class="thread-step" data-thread-step="2" data-title="${esc(FINDINGS[4].label)}" data-value="${esc(FINDINGS[4].value)}" data-url="${esc(FINDINGS[4].url)}" data-publisher="${esc(FINDINGS[4].publisher)}" data-published="${esc(FINDINGS[4].published)}">
+      <p class="thread-index">03 / Another route</p><h3>Use can outlast a trend.</h3><p>A review of 45 publications found reuse impacts lower than recycling overall. The comparison depends on what reuse replaces, how long an item is used, and transport.</p><p class="thread-hint">Next: explore the evidence <span aria-hidden="true">↓</span></p>
+    </article>
+  </div></section>
   <section aria-labelledby="ev"><h2 id="ev">The evidence</h2><p>Each figure was read at its source on the date shown. These are separate estimates with different scopes, so they are listed side by side rather than combined.</p>
   ${FINDINGS.map(
     (
@@ -65,6 +88,36 @@ function story() {
   ${QUOTES.map((q) => `<figure class="box"><blockquote>“${esc(q.text)}”</blockquote><figcaption>${esc(q.speaker)}<br><small>${esc(q.note)} <a href="${esc(q.url)}">${esc(q.publisher)}</a>, ${esc(q.date)}. ${esc(q.reuse)}</small></figcaption></figure>`).join("")}</section>
   <section aria-labelledby="co"><h2 id="co">One garment is not the whole answer</h2><p>Textile waste is a systemic problem. Changing one top is a practical personal step, not a solution to it.</p>
   <p><a class="btn" href="#/studio">Transform a garment</a></p></section>`;
+  bindThreadStory();
+}
+function bindThreadStory() {
+  threadObserver?.disconnect();
+  const stage = $q("#thread-stage"), steps = [...$.querySelectorAll("[data-thread-step]")];
+  if (!stage || !steps.length) return;
+  const buttons = [...$.querySelectorAll("[data-thread-go]")];
+  const activate = (index) => {
+    const step = steps[index];
+    stage.dataset.step = index;
+    $q("#thread-label").textContent = step.dataset.title;
+    $q("#thread-value").textContent = step.dataset.value;
+    const source = $q("#thread-source");
+    source.href = step.dataset.url;
+    source.textContent = `${step.dataset.publisher}, ${step.dataset.published}`;
+    steps.forEach((item, i) => item.classList.toggle("is-current", i === index));
+    buttons.forEach((button, i) => button.setAttribute("aria-pressed", String(i === index)));
+  };
+  buttons.forEach((button) => button.addEventListener("click", () => {
+    const index = Number(button.dataset.threadGo);
+    activate(index);
+    steps[index].scrollIntoView({
+      behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
+      block: "center",
+    });
+  }));
+  threadObserver = new IntersectionObserver((entries) => entries.forEach((entry) => {
+    if (entry.isIntersecting) activate(Number(entry.target.dataset.threadStep));
+  }), { rootMargin: "-38% 0px -38% 0px", threshold: 0 });
+  steps.forEach((step) => threadObserver.observe(step));
 }
 const back = () =>
   `<p><button class="btn alt" id="again">Use a different photo</button></p>`;
