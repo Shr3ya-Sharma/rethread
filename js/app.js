@@ -63,7 +63,12 @@ function story() {
       [FINDINGS[0], "Buy & wear"],
       [FINDINGS[1], "Discard"],
       [FINDINGS[4], "Reuse"],
-    ].map(([finding, label], i) => `<button type="button" data-thread-go="${i}" aria-pressed="${i === 0}"><span>0${i + 1}</span>${label}</button>`).join("")}</div>
+    ]
+      .map(
+        ([finding, label], i) =>
+          `<button type="button" data-thread-go="${i}" aria-pressed="${i === 0}"><span>0${i + 1}</span>${label}</button>`,
+      )
+      .join("")}</div>
   </div>
   <div class="thread-steps">
     <article class="thread-step is-current" data-thread-step="0" data-title="${esc(FINDINGS[0].label)}" data-value="${esc(FINDINGS[0].value)}" data-url="${esc(FINDINGS[0].url)}" data-publisher="${esc(FINDINGS[0].publisher)}" data-published="${esc(FINDINGS[0].published)}">
@@ -92,7 +97,8 @@ function story() {
 }
 function bindThreadStory() {
   threadObserver?.disconnect();
-  const stage = $q("#thread-stage"), steps = [...$.querySelectorAll("[data-thread-step]")];
+  const stage = $q("#thread-stage"),
+    steps = [...$.querySelectorAll("[data-thread-step]")];
   if (!stage || !steps.length) return;
   const buttons = [...$.querySelectorAll("[data-thread-go]")];
   const activate = (index) => {
@@ -103,20 +109,33 @@ function bindThreadStory() {
     const source = $q("#thread-source");
     source.href = step.dataset.url;
     source.textContent = `${step.dataset.publisher}, ${step.dataset.published}`;
-    steps.forEach((item, i) => item.classList.toggle("is-current", i === index));
-    buttons.forEach((button, i) => button.setAttribute("aria-pressed", String(i === index)));
+    steps.forEach((item, i) =>
+      item.classList.toggle("is-current", i === index),
+    );
+    buttons.forEach((button, i) =>
+      button.setAttribute("aria-pressed", String(i === index)),
+    );
   };
-  buttons.forEach((button) => button.addEventListener("click", () => {
-    const index = Number(button.dataset.threadGo);
-    activate(index);
-    steps[index].scrollIntoView({
-      behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
-      block: "center",
-    });
-  }));
-  threadObserver = new IntersectionObserver((entries) => entries.forEach((entry) => {
-    if (entry.isIntersecting) activate(Number(entry.target.dataset.threadStep));
-  }), { rootMargin: "-38% 0px -38% 0px", threshold: 0 });
+  buttons.forEach((button) =>
+    button.addEventListener("click", () => {
+      const index = Number(button.dataset.threadGo);
+      activate(index);
+      steps[index].scrollIntoView({
+        behavior: matchMedia("(prefers-reduced-motion: reduce)").matches
+          ? "auto"
+          : "smooth",
+        block: "center",
+      });
+    }),
+  );
+  threadObserver = new IntersectionObserver(
+    (entries) =>
+      entries.forEach((entry) => {
+        if (entry.isIntersecting)
+          activate(Number(entry.target.dataset.threadStep));
+      }),
+    { rootMargin: "-38% 0px -38% 0px", threshold: 0 },
+  );
   steps.forEach((step) => threadObserver.observe(step));
 }
 const back = () =>
@@ -439,7 +458,7 @@ const revealObserver = new IntersectionObserver(
   { threshold: 0.08, rootMargin: "0px 0px -35px 0px" },
 );
 const revealTargets =
-  ".story-hero,.story-hero + section,.story-hero + section ~ section,.box,article,section";
+  ".story-hero,.story-hero + section,.story-hero + section ~ section,.box,article:not(.thread-step),section:not(.thread-story)";
 new MutationObserver((records) =>
   records.forEach((record) =>
     record.addedNodes.forEach((node) => {

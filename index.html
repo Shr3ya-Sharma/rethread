@@ -201,6 +201,220 @@
         font-size: 0.78rem;
         color: #5f665c;
       }
+      .thread-story {
+        display: grid;
+        grid-template-columns: minmax(0, 0.95fr) minmax(0, 1fr);
+        align-items: start;
+        gap: clamp(2rem, 7vw, 6rem);
+        margin: 5rem 0 8rem;
+      }
+      .thread-stage {
+        position: sticky;
+        top: 6rem;
+        display: flex;
+        flex-direction: column;
+        min-height: 600px;
+        overflow: hidden;
+        padding: clamp(1.4rem, 3vw, 2.4rem);
+        color: var(--white);
+        background:
+          repeating-linear-gradient(0deg, #ffffff08 0 1px, transparent 1px 7px),
+          var(--forest);
+        box-shadow: 8px 8px 0 var(--sun);
+      }
+      .thread-stage .eyebrow {
+        color: var(--sun);
+      }
+      .thread-stage h2 {
+        max-width: 12ch;
+        margin: 0.4rem 0 1.5rem;
+        color: var(--white);
+      }
+      .thread-mark {
+        position: relative;
+        display: grid;
+        place-items: center;
+        height: 145px;
+        margin: 0.2rem 0 0.7rem;
+        border-block: 1px solid #ffffff30;
+      }
+      .thread-orbit {
+        position: absolute;
+        width: 120px;
+        aspect-ratio: 1;
+        border: 1px dashed #ffffff70;
+        border-radius: 50%;
+        transition: transform 0.6s ease;
+      }
+      .thread-orbit:before,
+      .thread-orbit:after {
+        position: absolute;
+        content: "";
+        border: 1px solid #ffffff60;
+        border-radius: 50%;
+        inset: 12px -14px;
+        transform: rotate(58deg);
+      }
+      .thread-orbit:after {
+        inset: -14px 12px;
+        transform: rotate(-42deg);
+      }
+      .thread-spool {
+        z-index: 1;
+        width: 48px;
+        height: 68px;
+        border: 9px solid var(--sun);
+        border-radius: 5px;
+        background: var(--tomato);
+        box-shadow:
+          0 0 0 5px var(--forest),
+          0 0 0 6px #ffffff70;
+        transition: transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1);
+      }
+      .thread-needle {
+        position: absolute;
+        z-index: 2;
+        left: calc(50% + 35px);
+        top: 10px;
+        width: 3px;
+        height: 116px;
+        border-radius: 3px;
+        background: var(--white);
+        transform: rotate(40deg);
+        transition: transform 0.45s ease;
+      }
+      .thread-needle:after {
+        position: absolute;
+        top: 0;
+        left: -2px;
+        width: 7px;
+        height: 7px;
+        border: 1px solid var(--white);
+        border-radius: 50%;
+        content: "";
+      }
+      .thread-stage[data-step="1"] .thread-orbit {
+        transform: rotate(75deg) scale(0.88);
+      }
+      .thread-stage[data-step="1"] .thread-spool {
+        transform: rotate(-12deg);
+      }
+      .thread-stage[data-step="2"] .thread-orbit {
+        transform: rotate(-55deg) scale(1.08);
+      }
+      .thread-stage[data-step="2"] .thread-spool {
+        transform: rotate(12deg) scale(0.92);
+      }
+      .thread-stage[data-step="2"] .thread-needle {
+        transform: rotate(-28deg);
+      }
+      .thread-fact {
+        min-height: 172px;
+        padding-top: 0.8rem;
+      }
+      .thread-kicker,
+      .thread-value,
+      .thread-source {
+        margin: 0.3rem 0;
+      }
+      .thread-kicker,
+      .thread-source {
+        font-size: 0.78rem;
+      }
+      .thread-kicker {
+        color: var(--sun);
+        font-weight: 700;
+      }
+      .thread-value {
+        max-width: 18ch;
+        font: 600 clamp(1.45rem, 2.7vw, 2.2rem)/1.18 var(--serif);
+      }
+      .thread-source a {
+        color: var(--white);
+      }
+      .thread-nav {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.45rem;
+        margin-top: auto;
+        padding-top: 0.8rem;
+        border-top: 1px solid #ffffff35;
+      }
+      .thread-nav button {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.15rem;
+        min-height: 56px;
+        padding: 0.5rem;
+        border: 1px solid transparent;
+        background: transparent;
+        color: #ffffffba;
+        font: 600 0.78rem/1.25 var(--sans);
+        text-align: left;
+        transition:
+          color 0.2s ease,
+          background 0.2s ease,
+          border-color 0.2s ease;
+      }
+      .thread-nav button span {
+        color: var(--sun);
+        font-size: 0.65rem;
+      }
+      .thread-nav button:hover,
+      .thread-nav button[aria-pressed="true"] {
+        border-color: #ffffff5c;
+        background: #ffffff12;
+        color: var(--white);
+      }
+      .thread-step {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        min-height: 66vh;
+        padding: 2.5rem 0 2.5rem 1.5rem;
+        border-left: 1px solid var(--line);
+        opacity: 0.42;
+        transition:
+          opacity 0.35s ease,
+          border-color 0.35s ease;
+      }
+      .thread-step.is-current {
+        border-color: var(--tomato);
+        opacity: 1;
+      }
+      .thread-step h3 {
+        max-width: 13ch;
+        font-size: clamp(1.8rem, 3.5vw, 2.7rem);
+      }
+      .thread-step > p:not(.thread-index):not(.thread-hint) {
+        max-width: 36ch;
+      }
+      .thread-index {
+        margin: 0 0 0.8rem;
+        color: var(--tomato);
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+      .thread-hint {
+        margin-top: auto;
+        padding-top: 2rem;
+        color: #646c60;
+        font-size: 0.76rem;
+      }
+      .thread-hint span {
+        display: inline-block;
+        margin-left: 0.35rem;
+        color: var(--tomato);
+        animation: stitch-down 1.5s ease-in-out infinite;
+      }
+      @keyframes stitch-down {
+        50% {
+          transform: translateY(4px);
+        }
+      }
       .btn {
         display: inline-flex;
         justify-content: center;
@@ -467,6 +681,80 @@
           right: 4%;
           top: 9%;
           opacity: 0.14;
+        }
+        .thread-story {
+          display: block;
+          margin: 3rem 0 5rem;
+        }
+        .thread-stage {
+          top: 4.2rem;
+          z-index: 3;
+          display: grid;
+          grid-template-columns: minmax(0, 1fr) minmax(90px, 0.55fr);
+          gap: 0.2rem 0.8rem;
+          min-height: 0;
+          padding: 0.9rem;
+          box-shadow: 4px 4px 0 var(--sun);
+        }
+        .thread-stage .eyebrow,
+        .thread-nav {
+          grid-column: 1 / -1;
+        }
+        .thread-stage h2 {
+          align-self: center;
+          margin: 0;
+          font-size: 1.45rem;
+        }
+        .thread-mark {
+          grid-column: 2;
+          grid-row: 2 / 4;
+          height: 72px;
+          margin: 0;
+          border: 0;
+        }
+        .thread-orbit {
+          width: 62px;
+        }
+        .thread-spool {
+          width: 28px;
+          height: 40px;
+          border-width: 5px;
+        }
+        .thread-needle {
+          top: 3px;
+          height: 65px;
+          left: calc(50% + 17px);
+        }
+        .thread-fact {
+          grid-column: 1 / -1;
+          display: grid;
+          grid-template-columns: 1fr 1.4fr;
+          align-items: baseline;
+          gap: 0 0.5rem;
+          min-height: 0;
+          padding-top: 0.5rem;
+          border-top: 1px solid #ffffff35;
+        }
+        .thread-kicker,
+        .thread-source {
+          font-size: 0.68rem;
+        }
+        .thread-value {
+          grid-column: 2;
+          grid-row: 1 / 3;
+          font-size: 1.1rem;
+        }
+        .thread-nav {
+          padding-top: 0.4rem;
+        }
+        .thread-nav button {
+          min-height: 42px;
+          padding: 0.35rem;
+          font-size: 0.68rem;
+        }
+        .thread-step {
+          min-height: 58vh;
+          padding: 2rem 0 2rem 1rem;
         }
         section {
           margin: 4rem 0;
