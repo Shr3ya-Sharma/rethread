@@ -89,7 +89,7 @@ function story() {
   <details><summary>Source, method and limits</summary><p><a href="${esc(f.url)}">${esc(f.title)}</a>, ${esc(f.publisher)}, ${esc(f.published)}.</p><p><strong>Method:</strong> ${esc(f.method)}</p><p><strong>Limits:</strong> ${esc(f.limits)}</p><p><small>Denominator: ${esc(f.denominator)}. Reviewed ${esc(f.reviewed)}.</small></p></details></article>`,
   ).join("")}
   <p><small>${PENDING_COUNT} further claims are withheld until they have been checked against their original sources. The study of upcycled workwear covers a fleece jacket, trousers and a hi-vis jacket, not T-shirts, so its savings should not be assumed for your top.</small></p></section>
-  <section aria-labelledby="vo"><h2 id="vo">Voices</h2><p>One short, attributed quotation. It illustrates the human side of the industry and does not show how common any experience is.</p>
+  <section aria-labelledby="vo"><h2 id="vo">Voices</h2>
   ${QUOTES.map((q) => `<figure class="box"><blockquote>“${esc(q.text)}”</blockquote><figcaption>${esc(q.speaker)}<br><small>${esc(q.note)} <a href="${esc(q.url)}">${esc(q.publisher)}</a>, ${esc(q.date)}. ${esc(q.reuse)}</small></figcaption></figure>`).join("")}</section>
   <section aria-labelledby="co"><h2 id="co">One garment is not the whole answer</h2><p>Textile waste is a systemic problem. Changing one top is a practical personal step, not a solution to it.</p>
   <p><a class="btn" href="#/studio">Transform a garment</a></p></section>`;
