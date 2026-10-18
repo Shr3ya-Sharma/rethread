@@ -32,39 +32,17 @@ Research claims are presented individually because they have different scopes an
 - The TensorFlow.js library is loaded from jsDelivr, and the model files are fetched from this site's `model/` directory for analysis.
 - Guide checklist progress is stored in this browser's local storage on this device. It is not synced between devices.
 
-## Run Locally
+## Tech Stack
 
-The site uses native JavaScript modules and fetches model files, so open it through HTTP or HTTPS rather than double-clicking `index.html`.
+- **Web app:** HTML, CSS, and native JavaScript modules, hosted as a static site on GitHub Pages.
+- **Image classifier:** Created and trained as a neural network in Google Teachable Machine, then exported and run in the browser with TensorFlow.js.
+- **Design:** Figma for the first design draft.
+- **Development environment:** Visual Studio Code.
+- **AI-assisted development:** Claude, GitHub Copilot, and ChatGPT supported project planning and development. These are development tools, not runtime dependencies of the site.
 
-1. From the project directory, start a static server:
+## Live Site
 
-   ```powershell
-   python -m http.server 8000
-   ```
-
-2. Open [http://localhost:8000](http://localhost:8000).
-
-The model and TensorFlow.js are loaded when image analysis is used, so that feature requires a network connection.
-
-## Tests
-
-The logic tests use Node.js 20 or newer and the built-in test runner:
-
-```powershell
-node --test tests/engine.test.mjs tests/logic.test.mjs
-```
-
-The suite covers recommendation eligibility, required measurements, preference constraints, guide completeness, and image-classification decision rules.
-
-## Deploy To GitHub Pages
-
-There is no build step. Push the project files to the repository, then configure GitHub Pages:
-
-1. Open **Settings > Pages**.
-2. Choose **Deploy from a branch**.
-3. Select the `main` branch and the `/(root)` folder.
-
-The model path is relative to the app, so it works under a GitHub Pages project URL as well as at the site root.
+ReThread is published at [https://shr3ya-sharma.github.io/rethread/](https://shr3ya-sharma.github.io/rethread/) using GitHub Pages. The site is served directly from the repository; it does not require a separate application server or build step. Image analysis requires a network connection to load TensorFlow.js and the model files.
 
 ## Project Structure
 
